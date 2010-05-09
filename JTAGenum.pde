@@ -409,13 +409,14 @@ static void scan_idcode()
 			  "Starting scan for IDCODE...\r\n"
 			  //"(if activity found, examine for IDCODE. Pits printed in shift right order with MSB first)\n"
 			     ));
-        char idcodestr[] = "                                ";
-        int idcode_i=31; // TODO: artifact that might need to be configurable
         uint32_t idcode;
         for(tck=0;tck<pinslen;tck++) {
                 for(tms=0;tms<pinslen;tms++) {
                         if(tms == tck) continue;
                         for(tdo=0;tdo<pinslen;tdo++) {
+			        char idcodestr[] = "                                ";
+				int idcode_i=31; // TODO: artifact that might need to be configurable
+
                                 if(tdo == tck) continue;
                                 if(tdo == tms) continue;
 
@@ -430,7 +431,7 @@ static void scan_idcode()
                                 /* read tdo. print if active. 
                                    human examination required to determine if if idcode found */
                                 prevbit=digitalRead(tdo); //default state before we pulse tdo
-                                for(i=0, bitstoggled=0, idcode=31; i<IR_IDCODE_ITERATIONS ;i++) {
+                                for(i=0, bitstoggled=0; i<IR_IDCODE_ITERATIONS ;i++) {
                                         tdo_read = pulse_tdo(pins[tck], pins[tdo]);
                                         if (tdo_read != prevbit)
                                                 bitstoggled++;
@@ -468,7 +469,7 @@ static void scan_idcode()
                         }
                 }
         }
-        printProgStr(PSTR("================================"));
+        printProgStr(PSTR("================================\r\n"));
 }
 
 static void shift_bypass()
